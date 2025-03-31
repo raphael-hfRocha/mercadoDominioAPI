@@ -23,7 +23,7 @@ Make sure that the application is running in development or production mode.
 Open your browser and go to the following address:
 
 ```shell script
-http://localhost:8080/q/swagger-ui/
+http://localhost:8080/swagger-ui/
 ```
 
 You'll see an interactive interface where you can explore and test the available endpoints.
