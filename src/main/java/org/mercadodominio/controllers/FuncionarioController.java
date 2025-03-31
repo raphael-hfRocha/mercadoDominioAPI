@@ -5,57 +5,78 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import org.mercadodominio.models.Cliente;
 import org.mercadodominio.models.Funcionario;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Path("/funcionarios")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class FuncionarioController {
 
-    private List<Funcionario> listaFuncionarios = new ArrayList<>(); // Lista todos os produtos
-    
     @GET
     public List<Funcionario> getAllUFuncionarios() {
         return Funcionario.listAll();
     }
-    
+
     @GET
     @Path("/{id}")
-    public Funcionario getFuncionarioById(@PathParam("id") Long id) {
-        return Funcionario.findById(id);
+    public Response getFuncionarioById(@PathParam("id") Long id) {
+        Funcionario funcionario = Funcionario.findById(id);
+        if (funcionario == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Funcionario não encontrado").build();
+        }
+        return Response.ok(funcionario).build();
     }
 
     @POST
     @Transactional
-    public Funcionario addFuncionario(@RequestBody Funcionario funcionario) {
+    public Response addFuncionario(@RequestBody Funcionario funcionario) {
+        // Validação básica dos campos obrigatórios
+        if (funcionario.funcionarioNome == null || funcionario.funcionarioNome.isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Nome do produto é obrigatório").build();
+        }
+
+        // Garante que é um novo produto (ID deve ser nulo)
+        if (funcionario.funcionarioId != null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("ID não deve ser fornecido para um novo produto").build();
+        }
+
+        // Persiste o novo produto
         funcionario.persist();
-        return funcionario;
+
+        return Response.status(Response.Status.CREATED).entity(funcionario).build();
     }
 
     @PUT
     @Path("/{id}")
-    public ResponseEntity<Funcionario> editFuncionario(@PathParam("id") Long id, @RequestBody Funcionario funcionarioAtualizado) {
-        listaFuncionarios = listaFuncionarios.stream().filter(f -> f.funcionarioId == id).collect(Collectors.toList());
-        for (Funcionario u : listaFuncionarios) {
-            u.funcionarioNome = funcionarioAtualizado.funcionarioNome;
-            u.funcionarioEmail = funcionarioAtualizado.funcionarioEmail;
-            u.funcionarioIdade = funcionarioAtualizado.funcionarioIdade;
-            return ResponseEntity.ok(u);
+    @Transactional
+    public Response editFuncionario(@PathParam("id") Long id,
+            @RequestBody Funcionario funcionarioAtualizado) {
+        Funcionario funcionario = Funcionario.findById(id);
+        if (funcionario == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Produto não encontrado").build();
         }
 
-        return ResponseEntity.notFound().build();
+        if (funcionarioAtualizado.funcionarioNome == null || funcionarioAtualizado.funcionarioNome.isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Nome do funcionario é obrigatório").build();
+        }
+
+        funcionario.funcionarioNome = funcionarioAtualizado.funcionarioNome;
+        funcionario.funcionarioEmail = funcionarioAtualizado.funcionarioEmail;
+        funcionario.funcionarioIdade = funcionarioAtualizado.funcionarioIdade;
+
+        return Response.ok(funcionario).build();
     }
 
     @DELETE
     @Path("/{id}")
+    @Transactional
     public Response deleteFuncionario(@PathParam("id") Long id) {
-        boolean deleted = Cliente.deleteById(id); // Deleta o produto pelo ID
+        boolean deleted = Funcionario.deleteById(id); // Deleta o produto pelo ID
         if (!deleted) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
