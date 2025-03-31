@@ -1,5 +1,11 @@
 package org.mercadodominio.controllers;
 
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
+import org.mercadodominio.models.Cliente;
 import org.mercadodominio.models.Funcionario;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -7,37 +13,52 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestController
-@RequestMapping("/funcionarios")
+@Path("/funcionarios")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class FuncionarioController {
-    private List<Funcionario> listaFuncionarios = new ArrayList<>();
 
-    @GetMapping
+    private List<Funcionario> listaFuncionarios = new ArrayList<>(); // Lista todos os produtos
+    
+    @GET
     public List<Funcionario> getAllUFuncionarios() {
-        return listaFuncionarios;
+        return Funcionario.listAll();
+    }
+    
+    @GET
+    @Path("/{id}")
+    public Funcionario getFuncionarioById(@PathParam("id") Long id) {
+        return Funcionario.findById(id);
     }
 
-    @PostMapping
-    public void addFuncionario(Funcionario funcionario) {
-        listaFuncionarios.add(funcionario);
+    @POST
+    @Transactional
+    public Funcionario addFuncionario(@RequestBody Funcionario funcionario) {
+        funcionario.persist();
+        return funcionario;
     }
 
-    @PutMapping("/{FUNCIONARIO_ID}")
-    public ResponseEntity<Funcionario> editFuncionario(@PathVariable("FUNCIONARIO_ID") int id, @RequestBody Funcionario funcionarioAtualizado) {
-        listaFuncionarios = listaFuncionarios.stream().filter(f -> f.getFuncionarioId() == id).collect(Collectors.toList());
+    @PUT
+    @Path("/{id}")
+    public ResponseEntity<Funcionario> editFuncionario(@PathParam("id") Long id, @RequestBody Funcionario funcionarioAtualizado) {
+        listaFuncionarios = listaFuncionarios.stream().filter(f -> f.funcionarioId == id).collect(Collectors.toList());
         for (Funcionario u : listaFuncionarios) {
-                u.setFuncionarioNome(funcionarioAtualizado.getFuncionarioNome());
-                u.setFuncionarioEmail(funcionarioAtualizado.getFuncionarioEmail());
-                u.setFuncionarioIdade(funcionarioAtualizado.getFuncionarioIdade());
-                return ResponseEntity.ok(u);
+            u.funcionarioNome = funcionarioAtualizado.funcionarioNome;
+            u.funcionarioEmail = funcionarioAtualizado.funcionarioEmail;
+            u.funcionarioIdade = funcionarioAtualizado.funcionarioIdade;
+            return ResponseEntity.ok(u);
         }
 
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping
-    public void deleteFuncionario(int id) {
-        listaFuncionarios.removeIf(f -> f.getFuncionarioId() == id);
+    @DELETE
+    @Path("/{id}")
+    public Response deleteFuncionario(@PathParam("id") Long id) {
+        boolean deleted = Cliente.deleteById(id); // Deleta o produto pelo ID
+        if (!deleted) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.noContent().build();
     }
-
 }

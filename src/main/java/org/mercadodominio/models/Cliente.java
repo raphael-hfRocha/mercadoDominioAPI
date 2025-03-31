@@ -1,34 +1,26 @@
 package org.mercadodominio.models;
 
-import com.google.gson.annotations.SerializedName;
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import jakarta.persistence.*;
 import lombok.*;
+import java.lang.Long;
 
-@Getter // Gera getters para todos os campos
-@Setter // Gera setters para todos os campos
 @AllArgsConstructor // Gera um construtor com todos os argumentos
 @NoArgsConstructor // Gera um construtor sem argumentos
 @ToString // Gera o método toString()
 @EqualsAndHashCode // Gera equals() e hashCode()
+@Entity
+@Table(name = "CLIENTE")
+public class Cliente extends PanacheEntityBase {
 
-public class Cliente extends PanacheEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @SerializedName("CLIENTE_ID")
-    private int ClienteId;
-    @SerializedName("CLIENTE_NOME")
-    private String ClienteNome;
-    @SerializedName("CLIENTE_EMAIL")
-    private String ClienteEmail;
-    @SerializedName("CLIENTE_IDADE")
-    private int ClienteIdade;
-
-    public Cliente(String clienteNome, String clienteEmail, int clienteIdade) {
-        ClienteNome = clienteNome;
-        ClienteEmail = clienteEmail;
-        ClienteIdade = clienteIdade;
-    }
+    @Id // Define o campo como chave primária
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Configura o auto-incremento
+    @Column(name = "CLIENTE_ID")
+    public Long ClienteId;
+    @Column(name = "CLIENTE_NOME", nullable = false)
+    public String ClienteNome;
+    @Column(name = "CLIENTE_EMAIL", nullable = false, unique = true)
+    public String ClienteEmail;
+    @Column(name = "CLIENTE_IDADE", nullable = false)
+    public int ClienteIdade;
 }

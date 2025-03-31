@@ -1,32 +1,58 @@
 package org.mercadodominio.models;
 
-import com.google.gson.annotations.SerializedName;
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
-import lombok.*;
-
-@Getter // Gera getters para todos os campos
-@Setter // Gera setters para todos os campos
-@NoArgsConstructor // Gera um construtor sem argumentos
-@AllArgsConstructor // Gera um construtor com todos os argumentos
-@ToString // Gera o método toString()
-@EqualsAndHashCode // Gera equals() e hashCode()
-
 
 @Entity
-public class Produto extends PanacheEntity  {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @SerializedName("PRODUTO_ID") private int ProdutoId;
-    @SerializedName("PRODUTO_NOME") private String ProdutoNome;
-    @SerializedName("CATEGORIA_ID") private int CategoriaId;
-    @SerializedName("PRODUTO_DESCRICAO") private String ProdutoDescricao;
-    @SerializedName("PRODUTO_PRECO") private Double ProdutoPreco;
+@Table(name = "PRODUTO")
+public class Produto extends PanacheEntityBase {
+    @Id // Define o campo como chave primária
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Configura o auto-incremento
+    @Column(name = "PRODUTO_ID")
+    public Long produtoId;
+    @Column(name = "PRODUTO_NOME", nullable = false)
+    public String produtoNome;
+    @Column(name = "CATEGORIA_ID", nullable = false)
+    public int categoriaId;
+    @Column(name = "PRODUTO_DESCRICAO", nullable = false)
+    public String produtoDescricao;
+    @Column(name = "PRODUTO_PRECO", nullable = false)
+    public Double produtoPreco;
+    
+    public Produto() {}
 
-    public Produto(String produtoNome, int categoriaId, String produtoDescricao, Double produtoPreco) {
-        ProdutoNome = produtoNome;
-        CategoriaId = categoriaId;
-        ProdutoDescricao = produtoDescricao;
-        ProdutoPreco = produtoPreco;
+    @Override
+    public String toString() {
+        return "Produto{" +
+                "ProdutoId=" + produtoId +
+                ", ProdutoNome=" + produtoNome + '\'' +
+                ", CategoriaId=" + categoriaId +
+                ", ProdutoDescricao='" + produtoDescricao + '\'' +
+                ", ProdutoPreco=" + produtoPreco +
+                '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Produto produto = (Produto) o;
+
+        if (produtoId != produto.produtoId) return false;
+        if (categoriaId != produto.categoriaId) return false;
+        if (!produtoNome.equals(produto.produtoNome)) return false;
+        if (!produtoDescricao.equals(produto.produtoDescricao)) return false;
+        return produtoPreco.equals(produto.produtoPreco);
+    }
+
+    // @Override
+    // public Long hashCode() {
+    //     Long result = ProdutoId;
+    //     result = 31 * result + ProdutoNome.hashCode();
+    //     result = 31 * result + CategoriaId;
+    //     result = 31 * result + ProdutoDescricao.hashCode();
+    //     result = 31 * result + ProdutoPreco.hashCode();
+    //     return result;
+    // }
 }
