@@ -5,7 +5,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.mercadodominio.models.Produto;
-
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Path("/produtos")
@@ -52,7 +52,7 @@ public class ProdutoController {
     @PUT
     @Path("/{id}")
     @Transactional
-    public Response atualizarProduto(@PathParam("id") Long id, Produto produtoAtualizado) {
+    public Response atualizarProduto(@PathParam("id") Long id, @RequestBody Produto produtoAtualizado) {
         Produto produto = Produto.findById(id);
         if (produto == null) {
             return Response.status(Response.Status.NOT_FOUND).entity("Produto não encontrado").build();
@@ -73,6 +73,7 @@ public class ProdutoController {
 
     @DELETE
     @Path("/{id}")
+    @Transactional
     public Response deletarProduto(@PathParam("id") Long id) {
         boolean deleted = Produto.deleteById(id); // Deleta o produto pelo ID
         if (!deleted) {

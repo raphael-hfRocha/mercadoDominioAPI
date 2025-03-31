@@ -9,7 +9,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import org.mercadodominio.models.Categoria;
-import org.mercadodominio.models.Produto;
 
 import java.util.List;
 
