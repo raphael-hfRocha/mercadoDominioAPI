@@ -9,14 +9,9 @@ import org.mercadodominio.controllers.ClienteController;
 import org.mercadodominio.controllers.ProdutoController;
 import org.mercadodominio.controllers.FuncionarioController;
 
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
 
-@Path("/mercado-dominio")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
 public class GreetingResource {
 
     private final ClienteController clienteController = new ClienteController();
@@ -110,29 +105,8 @@ public class GreetingResource {
         return Response.ok(categoria).build();
     }
 
-    // @POST
-    // @Path("/categorias")
-    // public Response adicionarCategoria(Categoria categoria) {
-    // categoriaController.adicionarCategoria(categoria);
-    // return Response.status(Response.Status.CREATED).entity(categoria).build();
-    // }
 
-    // @PUT
-    // @Path("/categorias/{id}")
-    // public Response editarCategoria(@PathParam("id") Long id, Categoria
-    // categoria) {
-    // categoriaController.editarCategoria(id, categoria);
-    // return Response.ok(categoria).build();
-    // }
-
-    // @DELETE
-    // @Path("/categorias/{id}")
-    // public Response excluirCategoria(@PathParam("id") Long id) {
-    // categoriaController.excluirCategoria(id);
-    // return Response.noContent().build();
-    // }
-
-    // // ==================== FUNCIONARIO ====================
+    // ==================== FUNCIONARIO ====================
 
     public Response listarFuncionarios() {
         List<Funcionario> funcionarios = funcionarioController.getAllUFuncionarios();
@@ -140,7 +114,7 @@ public class GreetingResource {
     }
 
     public Response buscarFuncionario(Long id) {
-        Funcionario funcionario = funcionarioController.getFuncionarioById(id);
+        Response funcionario = funcionarioController.getFuncionarioById(id);
         if (funcionario == null) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("Funcionário não encontrado")

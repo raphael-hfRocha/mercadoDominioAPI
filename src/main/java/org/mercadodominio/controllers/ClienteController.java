@@ -34,30 +34,44 @@ public class ClienteController {
 
     @POST
     @Transactional
-    public Cliente adicionarCliente(Cliente cliente) {
-        cliente.persist(); // Persiste o produto no banco de dados
-        if (cliente == null) {
-            throw new IllegalArgumentException("O cliente não pode ser nulo");
+    public Response adicionarCliente(Cliente cliente) {
+        if (cliente.clienteNome == null || cliente.clienteNome.isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Nome do produto é obrigatório").build();
         }
-        return cliente; // Retorna o produto adicionado
+
+        if (cliente.clienteId != null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("ID não deve ser fornecido para um novo produto").build();
+        }
+
+        cliente.persist();
+        return Response.status(Response.Status.CREATED).entity(cliente).build();
     }
-    
+
     @PUT
-    @Path("/id")
+    @Path("/{id}")
     public Response editarCliente(@PathParam("id") Long id, Cliente clienteAtualizado) {
         Cliente cliente = Cliente.findById(id);
         if (cliente == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        cliente.ClienteNome = clienteAtualizado.ClienteNome;
-        cliente.ClienteEmail = clienteAtualizado.ClienteEmail;
-        cliente.ClienteIdade = clienteAtualizado.ClienteIdade;
+ 
+        if (clienteAtualizado.clienteNome == null || clienteAtualizado.clienteNome.isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Nome do cliente é obrigatório").build();
+        }
+
+        cliente.clienteNome = clienteAtualizado.clienteNome;
+        cliente.clienteEmail = clienteAtualizado.clienteEmail;
+        cliente.clienteIdade = clienteAtualizado.clienteIdade;
         cliente.persist();
         return Response.ok(cliente).build();
     }
 
     @DELETE
     @Path("/{id}")
+    @Transactional
     public Response excluirCliente(Long id) {
         boolean deleted = Cliente.deleteById(id); // Deleta o produto pelo ID
         if (!deleted) {
