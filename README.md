@@ -14,6 +14,22 @@ You can run your application in dev mode that enables live coding using:
 
 > **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
 
+## Accessing the Swagger-UI
+
+Swagger-UI is available to view and test your project's REST APIs. To access it, follow the steps below:
+
+Make sure that the application is running in development or production mode.
+
+Open your browser and go to the following address:
+
+```shell script
+http://localhost:8080/swagger-ui/
+```
+
+You'll see an interactive interface where you can explore and test the available endpoints.
+
+> **_NOTE:_**  Swagger-UI is enabled by the quarkus-smallrye-openapi extension, which is already configured in the project..
+
 ## Packaging and running the application
 
 The application can be packaged using:
