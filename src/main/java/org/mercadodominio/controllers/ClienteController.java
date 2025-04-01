@@ -23,13 +23,13 @@ public class ClienteController {
 
     @GET
     public List<Cliente> listarClientes() {
-        return Cliente.listAll(); // Método do PanacheEntity para listar todos os produtos
+        return Cliente.listAll(); // Método do PanacheEntity para listar todos os clientes
     }
 
     @GET
     @Path("/{id}")
     public Cliente buscarCliente(Long id) {
-        return Cliente.findById(id); // Busca um produto pelo ID
+        return Cliente.findById(id); // Busca um cliente pelo ID
     }
 
     @POST
@@ -37,12 +37,12 @@ public class ClienteController {
     public Response adicionarCliente(Cliente cliente) {
         if (cliente.getClienteNome() == null || cliente.getClienteNome().isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("Nome do produto é obrigatório").build();
+                    .entity("Nome do cliente é obrigatório").build();
         }
 
         if (cliente.getClienteId() != null) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("ID não deve ser fornecido para um novo produto").build();
+                    .entity("ID não deve ser fornecido para um novo cliente").build();
         }
 
         cliente.persist();
@@ -76,7 +76,7 @@ public class ClienteController {
     @Path("/{id}")
     @Transactional
     public Response excluirCliente(Long id) {
-        boolean deleted = Cliente.deleteById(id); // Deleta o produto pelo ID
+        boolean deleted = Cliente.deleteById(id); // Deleta o cliente pelo ID
         if (!deleted) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
