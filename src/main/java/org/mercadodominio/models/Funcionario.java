@@ -9,21 +9,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
+@Getter
+@Setter
 @NoArgsConstructor // Gera um construtor sem argumentos
 @AllArgsConstructor // Gera um construtor com todos os argumentos
-@ToString // Gera o método toString()
-@EqualsAndHashCode // Gera equals() e hashCode()
 @Entity
 @Table(name = "FUNCIONARIO")
 public class Funcionario extends PanacheEntityBase {
     @Id // Define o campo como chave primária
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Configura o auto-incremento
     @Column(name = "FUNCIONARIO_ID")
-    public Long funcionarioId;
+    private Long funcionarioId;
     @Column(name = "FUNCIONARIO_NOME")
-    public String funcionarioNome;
+    private String funcionarioNome;
     @Column(name = "FUNCIONARIO_EMAIL")
-    public String funcionarioEmail;
+    private String funcionarioEmail;
     @Column(name = "FUNCIONARIO_IDADE")
-    public int funcionarioIdade;
+    private int funcionarioIdade;
 }

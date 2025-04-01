@@ -33,41 +33,41 @@ public class FuncionarioController {
     @Transactional
     public Response addFuncionario(@RequestBody Funcionario funcionario) {
         // Validação básica dos campos obrigatórios
-        if (funcionario.funcionarioNome == null || funcionario.funcionarioNome.isEmpty()) {
+        if (funcionario.getFuncionarioNome() == null || funcionario.getFuncionarioNome().isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Nome do produto é obrigatório").build();
         }
 
         // Garante que é um novo produto (ID deve ser nulo)
-        if (funcionario.funcionarioId != null) {
+        if (funcionario.getFuncionarioId() != null) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("ID não deve ser fornecido para um novo produto").build();
         }
-
         // Persiste o novo produto
         funcionario.persist();
 
         return Response.status(Response.Status.CREATED).entity(funcionario).build();
     }
-
+ 
     @PUT
     @Path("/{id}")
     @Transactional
-    public Response editFuncionario(@PathParam("id") Long id,
-            @RequestBody Funcionario funcionarioAtualizado) {
+    public Response editFuncionario(@PathParam("id") Long id, @RequestBody Funcionario funcionarioAtualizado) {
         Funcionario funcionario = Funcionario.findById(id);
         if (funcionario == null) {
             return Response.status(Response.Status.NOT_FOUND).entity("Produto não encontrado").build();
         }
 
-        if (funcionarioAtualizado.funcionarioNome == null || funcionarioAtualizado.funcionarioNome.isEmpty()) {
+        if (funcionarioAtualizado.getFuncionarioNome() == null || funcionarioAtualizado.getFuncionarioNome().isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Nome do funcionario é obrigatório").build();
         }
 
-        funcionario.funcionarioNome = funcionarioAtualizado.funcionarioNome;
-        funcionario.funcionarioEmail = funcionarioAtualizado.funcionarioEmail;
-        funcionario.funcionarioIdade = funcionarioAtualizado.funcionarioIdade;
+        funcionario.setFuncionarioNome(funcionarioAtualizado.getFuncionarioNome());
+        funcionario.setFuncionarioEmail(funcionarioAtualizado.getFuncionarioEmail());
+        funcionario.setFuncionarioIdade(funcionarioAtualizado.getFuncionarioIdade());
+
+        funcionario.persist();
 
         return Response.ok(funcionario).build();
     }

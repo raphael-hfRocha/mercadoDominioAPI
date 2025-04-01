@@ -32,13 +32,13 @@ public class ProdutoController {
     @Transactional
     public Response criarProduto(Produto produto) {
         // Validação básica dos campos obrigatórios
-        if (produto.produtoNome == null || produto.produtoNome.isEmpty()) {
+        if (produto.getProdutoNome() == null || produto.getProdutoNome().isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Nome do produto é obrigatório").build();
         }
 
         // Garante que é um novo produto (ID deve ser nulo)
-        if (produto.produtoId != null) {
+        if (produto.getProdutoId() != null) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("ID não deve ser fornecido para um novo produto").build();
         }
@@ -58,15 +58,14 @@ public class ProdutoController {
             return Response.status(Response.Status.NOT_FOUND).entity("Produto não encontrado").build();
         }
 
-        if (produtoAtualizado.produtoNome == null || produtoAtualizado.produtoNome.isEmpty()) {
+        if (produtoAtualizado.getProdutoNome() == null || produtoAtualizado.getProdutoNome().isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Nome do produto é obrigatório").build();
         }
 
-        produto.produtoNome = produtoAtualizado.produtoNome;
-        produto.produtoDescricao = produtoAtualizado.produtoDescricao;
-        produto.produtoPreco = produtoAtualizado.produtoPreco;
-
+        produto.setProdutoNome(produtoAtualizado.getProdutoNome());
+        produto.setProdutoDescricao(produtoAtualizado.getProdutoDescricao());
+        produto.setProdutoPreco(produtoAtualizado.getProdutoPreco());
 
         return Response.ok(produto).build();
     }

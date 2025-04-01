@@ -3,12 +3,11 @@ package org.mercadodominio.models;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 import lombok.*;
-import java.lang.Long;
 
+@Getter
+@Setter
 @AllArgsConstructor // Gera um construtor com todos os argumentos
 @NoArgsConstructor // Gera um construtor sem argumentos
-@ToString // Gera o método toString()
-@EqualsAndHashCode // Gera equals() e hashCode()
 @Entity
 @Table(name = "CLIENTE")
 public class Cliente extends PanacheEntityBase {
@@ -16,11 +15,11 @@ public class Cliente extends PanacheEntityBase {
     @Id // Define o campo como chave primária
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Configura o auto-incremento
     @Column(name = "CLIENTE_ID")
-    public Long clienteId;
+    private Long clienteId;
     @Column(name = "CLIENTE_NOME", nullable = false)
-    public String clienteNome;
+    private String clienteNome;
     @Column(name = "CLIENTE_EMAIL", nullable = false, unique = true)
-    public String clienteEmail;
+    private String clienteEmail;
     @Column(name = "CLIENTE_IDADE", nullable = false)
-    public int clienteIdade;
+    private int clienteIdade;
 }

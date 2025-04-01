@@ -1,6 +1,5 @@
 package org.mercadodominio;
 
-import org.mercadodominio.GreetingResource;
 import org.springframework.boot.SpringApplication;
 
 public class mercadodominio {

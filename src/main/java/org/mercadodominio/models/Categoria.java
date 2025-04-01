@@ -7,14 +7,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.*;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "CATEGORIA")
 public class Categoria extends PanacheEntityBase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CATEGORIA_ID")
-    public Long CategoriaId;
+    private Long categoriaId;
     @Column(name = "CATEGORIA_NOME", nullable = false)
-    public String CategoriaNome;
+    private String categoriaNome;
 }

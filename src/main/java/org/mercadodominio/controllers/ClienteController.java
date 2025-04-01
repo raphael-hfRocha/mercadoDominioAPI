@@ -35,12 +35,12 @@ public class ClienteController {
     @POST
     @Transactional
     public Response adicionarCliente(Cliente cliente) {
-        if (cliente.clienteNome == null || cliente.clienteNome.isEmpty()) {
+        if (cliente.getClienteNome() == null || cliente.getClienteNome().isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Nome do produto é obrigatório").build();
         }
 
-        if (cliente.clienteId != null) {
+        if (cliente.getClienteId() != null) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("ID não deve ser fornecido para um novo produto").build();
         }
@@ -51,21 +51,24 @@ public class ClienteController {
 
     @PUT
     @Path("/{id}")
+    @Transactional
     public Response editarCliente(@PathParam("id") Long id, Cliente clienteAtualizado) {
         Cliente cliente = Cliente.findById(id);
         if (cliente == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
  
-        if (clienteAtualizado.clienteNome == null || clienteAtualizado.clienteNome.isEmpty()) {
+        if (clienteAtualizado.getClienteNome() == null || clienteAtualizado.getClienteNome().isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Nome do cliente é obrigatório").build();
         }
 
-        cliente.clienteNome = clienteAtualizado.clienteNome;
-        cliente.clienteEmail = clienteAtualizado.clienteEmail;
-        cliente.clienteIdade = clienteAtualizado.clienteIdade;
+        cliente.setClienteNome(clienteAtualizado.getClienteNome());
+        cliente.setClienteEmail(clienteAtualizado.getClienteEmail());
+        cliente.setClienteIdade(clienteAtualizado.getClienteIdade());
+        
         cliente.persist();
+        
         return Response.ok(cliente).build();
     }
 
