@@ -13,7 +13,7 @@ public class CategoriaController {
 
     @GET
     public List<Categoria> getAllCategorias() {
-        return Categoria.listAll(); // Método do PanacheEntity para listar todos os produtos
+        return Categoria.listAll(); // Método do PanacheEntity para listar todas as categorias
     }
     
     @GET

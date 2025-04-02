@@ -23,7 +23,7 @@ public class FuncionarioController {
     public Response getFuncionarioById(@PathParam("id") Long id) {
         Funcionario funcionario = Funcionario.findById(id);
         if (funcionario == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("Funcionario não encontrado").build();
+            return Response.status(Response.Status.NOT_FOUND).entity("Funcionário não encontrado").build();
         }
         return Response.ok(funcionario).build();
     }
@@ -34,15 +34,15 @@ public class FuncionarioController {
         // Validação básica dos campos obrigatórios
         if (funcionario.getFuncionarioNome() == null || funcionario.getFuncionarioNome().isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("Nome do produto é obrigatório").build();
+                    .entity("Nome do funcionario é obrigatório").build();
         }
 
-        // Garante que é um novo produto (ID deve ser nulo)
+        // Garante que é um novo funcionário (ID deve ser nulo)
         if (funcionario.getFuncionarioId() != null) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("ID não deve ser fornecido para um novo produto").build();
+                    .entity("ID não deve ser fornecido para um novo funcionário").build();
         }
-        // Persiste o novo produto
+        // Persiste o novo funcionário
         funcionario.persist();
 
         return Response.status(Response.Status.CREATED).entity(funcionario).build();
@@ -54,7 +54,7 @@ public class FuncionarioController {
     public Response editFuncionario(@PathParam("id") Long id, @RequestBody Funcionario funcionarioAtualizado) {
         Funcionario funcionario = Funcionario.findById(id);
         if (funcionario == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("Produto não encontrado").build();
+            return Response.status(Response.Status.NOT_FOUND).entity("Funcionário não encontrado").build();
         }
 
         if (funcionarioAtualizado.getFuncionarioNome() == null || funcionarioAtualizado.getFuncionarioNome().isEmpty()) {
@@ -75,7 +75,7 @@ public class FuncionarioController {
     @Path("/{id}")
     @Transactional
     public Response deleteFuncionario(@PathParam("id") Long id) {
-        boolean deleted = Funcionario.deleteById(id); // Deleta o produto pelo ID
+        boolean deleted = Funcionario.deleteById(id); // Deleta o funcionário pelo ID
         if (!deleted) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
