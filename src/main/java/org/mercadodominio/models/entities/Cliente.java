@@ -1,4 +1,4 @@
-package org.mercadodominio.models;
+package org.mercadodominio.models.entities;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;

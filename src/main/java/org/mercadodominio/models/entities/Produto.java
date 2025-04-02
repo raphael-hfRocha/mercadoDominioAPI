@@ -1,7 +1,8 @@
-package org.mercadodominio.models;
+package org.mercadodominio.models.entities;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -17,8 +18,10 @@ public class Produto extends PanacheEntityBase {
     private Long produtoId;
     @Column(name = "PRODUTO_NOME", nullable = false)
     private String produtoNome;
-    @Column(name = "CATEGORIA_ID", nullable = false)
-    private int categoriaId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CATEGORIA_ID", nullable = false, foreignKey = @ForeignKey(name = "CATEGORIA_ID"))
+    @NotNull(message = "A categoria do produto é obrigatória")
+    private Categoria produtoCategoria;
     @Column(name = "PRODUTO_DESCRICAO", nullable = false)
     private String produtoDescricao;
     @Column(name = "PRODUTO_PRECO", nullable = false)

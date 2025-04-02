@@ -1,17 +1,10 @@
 package org.mercadodominio;
 
-import org.mercadodominio.models.Categoria;
-import org.mercadodominio.models.Cliente;
-import org.mercadodominio.models.Produto;
-import org.mercadodominio.models.Funcionario;
-import org.mercadodominio.controllers.CategoriaController;
-import org.mercadodominio.controllers.ClienteController;
-import org.mercadodominio.controllers.ProdutoController;
-import org.mercadodominio.controllers.FuncionarioController;
-
+import org.mercadodominio.controllers.*;
+import org.mercadodominio.models.entities.*;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
-
+ 
 public class GreetingResource {
 
     private final ClienteController clienteController = new ClienteController();
@@ -96,7 +89,7 @@ public class GreetingResource {
         List<Categoria> categorias = categoriaController.getAllCategorias();
         return Response.ok(categorias).build();
     }
-
+ 
     public Response buscarCategoria(Long id) {
         Response categoria = categoriaController.getCategoriaById(id);
         if (categoria == null) {

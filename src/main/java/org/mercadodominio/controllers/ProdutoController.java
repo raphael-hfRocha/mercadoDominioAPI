@@ -1,12 +1,13 @@
 package org.mercadodominio.controllers;
 
+import java.util.List;
+import org.mercadodominio.models.entities.Categoria;
+import org.mercadodominio.models.entities.Produto;
+import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.*; 
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.mercadodominio.models.Produto;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @Path("/produtos")
 @Produces(MediaType.APPLICATION_JSON)
@@ -43,7 +44,14 @@ public class ProdutoController {
                     .entity("ID não deve ser fornecido para um novo produto").build();
         }
 
-        // Persiste o novo produto
+        // Buscar a categoria no banco de dados
+        Categoria categoria = Categoria.findById(produto.getProdutoCategoria().getCategoriaId());
+        if (categoria == null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Categoria inválida").build();
+        }
+
+        produto.setProdutoCategoria(categoria);
         produto.persist();
 
         return Response.status(Response.Status.CREATED).entity(produto).build();
@@ -63,7 +71,15 @@ public class ProdutoController {
                     .entity("Nome do produto é obrigatório").build();
         }
 
+
+        Categoria categoria = Categoria.findById(produtoAtualizado.getProdutoCategoria().getCategoriaId());
+        if (categoria == null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Categoria inválida").build();
+        } 
+
         produto.setProdutoNome(produtoAtualizado.getProdutoNome());
+        produto.setProdutoCategoria(categoria);
         produto.setProdutoDescricao(produtoAtualizado.getProdutoDescricao());
         produto.setProdutoPreco(produtoAtualizado.getProdutoPreco());
 

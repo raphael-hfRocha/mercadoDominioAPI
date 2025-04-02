@@ -4,8 +4,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
-import org.mercadodominio.models.Funcionario;
+import org.mercadodominio.models.entities.Funcionario;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 

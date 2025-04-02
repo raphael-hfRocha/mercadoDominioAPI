@@ -1,18 +1,9 @@
 package org.mercadodominio.controllers;
 
 import java.util.List;
-
-import org.mercadodominio.models.Cliente;
-
+import org.mercadodominio.models.entities.Cliente;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -57,18 +48,18 @@ public class ClienteController {
         if (cliente == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
- 
+
         if (clienteAtualizado.getClienteNome() == null || clienteAtualizado.getClienteNome().isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Nome do cliente é obrigatório").build();
         }
 
         cliente.setClienteNome(clienteAtualizado.getClienteNome());
-        cliente.setClienteEmail(clienteAtualizado.getClienteEmail());
+        cliente.setClienteEmail(clienteAtualizado.getClienteEmail()); 
         cliente.setClienteIdade(clienteAtualizado.getClienteIdade());
-        
+
         cliente.persist();
-        
+
         return Response.ok(cliente).build();
     }
 
